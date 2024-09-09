@@ -6,12 +6,12 @@ import (
 	"github.com/c-bata/go-prompt"
 )
 
-var commands = []prompt.Suggest{
+var cmdSuggests = []prompt.Suggest{
 	{Text: "send", Description: "Send message"},
 	{Text: "pull", Description: "Pull messages"},
 	{Text: "quit", Description: "Quit the app"},
-	{Text: "signin", Description: "Sing in account"},
-	{Text: "signup", Description: "Sign up account"},
+	{Text: "login", Description: "Login into account"},
+	{Text: "register", Description: "Register an account"},
 }
 
 func Completer(d prompt.Document) []prompt.Suggest {
@@ -22,7 +22,7 @@ func Completer(d prompt.Document) []prompt.Suggest {
 
 	cmd := args[0]
 	switch cmd {
-	case "signup", "signin":
+	case "login", "register":
 		if len(args) == 2 {
 			return []prompt.Suggest{{Text: "username", Description: "Your username"}}
 		} else if len(args) == 3 {
@@ -38,9 +38,9 @@ func Completer(d prompt.Document) []prompt.Suggest {
 		}
 	}
 
-	if sugs := prompt.FilterHasPrefix(commands, cmd, true); len(sugs) > 0 {
-		return sugs
+	if suggests := prompt.FilterHasPrefix(cmdSuggests, cmd, true); len(suggests) > 0 {
+		return suggests
 	}
 
-	return commands
+	return cmdSuggests
 }

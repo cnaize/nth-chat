@@ -2,6 +2,10 @@ package config
 
 type Config struct {
 	ServerURL string
-	Username  string
-	Password  string
+	Creds     Credentials
+}
+
+type Credentials struct {
+	Username string
+	Password string
 }

@@ -27,9 +27,9 @@ func run() error {
 	}()
 
 	p := prompt.New(
-		term.Executor(&cfg, client),
+		term.NewExecuter(&cfg, client).Handle,
 		term.Completer,
-		prompt.OptionTitle("geek's chat"),
+		prompt.OptionTitle("pull based chat"),
 		prompt.OptionPrefix("nth> "),
 		prompt.OptionInputTextColor(prompt.Yellow),
 	)
