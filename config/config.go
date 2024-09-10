@@ -1,8 +1,9 @@
 package config
 
 type Config struct {
-	ServerURL string
-	Creds     Credentials
+	NatsServerURL string
+	NatsHubDomain string
+	Credentials   Credentials
 }
 
 type Credentials struct {

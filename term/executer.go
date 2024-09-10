@@ -45,7 +45,7 @@ func (e *Executor) Handle(s string) {
 	cmd := args[0]
 	// check auth
 	if (cmd != "quit" && cmd != "login" && cmd != "register") &&
-		(e.cfg.Creds.Username == "" || e.cfg.Creds.Password == "") {
+		(e.cfg.Credentials.Username == "" || e.cfg.Credentials.Password == "") {
 		fmt.Println("You have to login first")
 		return
 	}
@@ -83,6 +83,11 @@ func (e *Executor) handleRegister(s string, args []string) error {
 }
 
 func (e *Executor) handleLogin(s string, args []string) error {
+	if len(e.cfg.Credentials.Username) > 0 {
+		fmt.Println("Already logged in as:", e.cfg.Credentials.Username)
+		return nil
+	}
+
 	if len(args) != 3 {
 		return entity.ErrInvalidArguments
 	}
@@ -93,12 +98,12 @@ func (e *Executor) handleLogin(s string, args []string) error {
 		return entity.ErrEmptyCredentials
 	}
 
-	e.cfg.Creds.Username = username
-	e.cfg.Creds.Password = password
-	fmt.Println("Success: logged in as", e.cfg.Creds.Username)
+	e.cfg.Credentials.Username = username
+	e.cfg.Credentials.Password = password
 
-	// pull messages
-	return e.handlePull("pull", []string{"pull"})
+	fmt.Println("Success: logged in as:", e.cfg.Credentials.Username)
+
+	return nil
 }
 
 func (e *Executor) handleSend(s string, args []string) error {
@@ -108,7 +113,7 @@ func (e *Executor) handleSend(s string, args []string) error {
 
 	if err := e.client.SendMessage(
 		entity.Message{
-			From: e.cfg.Creds.Username,
+			From: e.cfg.Credentials.Username,
 			To:   args[1],
 			Text: strings.Join(args[2:], " "),
 		},
@@ -126,7 +131,11 @@ func (e *Executor) handlePull(s string, args []string) error {
 	}
 
 	for _, msg := range messages {
-		fmt.Printf("%s %s -> %s: %s\n", time.Now().Local().Format(time.DateTime), msg.From, msg.To, msg.Text)
+		to := msg.To
+		if to == "" {
+			to = "public"
+		}
+		fmt.Printf("%s %s -> %s: %s\n", time.Now().Local().Format(time.DateTime), msg.From, to, msg.Text)
 	}
 
 	return nil

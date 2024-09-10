@@ -14,7 +14,8 @@ import (
 var cfg config.Config
 
 func run() error {
-	flag.StringVar(&cfg.ServerURL, "server-url", nats.DefaultURL, "nats server url")
+	flag.StringVar(&cfg.NatsServerURL, "nats-server-url", nats.DefaultURL, "nats server url")
+	flag.StringVar(&cfg.NatsHubDomain, "nats-hub-domain", "ngs", "nats hub domain")
 	flag.Parse()
 
 	client, err := client.NewClient(&cfg)
@@ -29,7 +30,7 @@ func run() error {
 	p := prompt.New(
 		term.NewExecuter(&cfg, client).Handle,
 		term.Completer,
-		prompt.OptionTitle("pull based chat"),
+		prompt.OptionTitle("pull-based chat"),
 		prompt.OptionPrefix("nth> "),
 		prompt.OptionInputTextColor(prompt.Yellow),
 	)

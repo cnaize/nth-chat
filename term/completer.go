@@ -9,9 +9,9 @@ import (
 var cmdSuggests = []prompt.Suggest{
 	{Text: "send", Description: "Send message"},
 	{Text: "pull", Description: "Pull messages"},
-	{Text: "quit", Description: "Quit the app"},
 	{Text: "login", Description: "Login into account"},
 	{Text: "register", Description: "Register an account"},
+	{Text: "quit", Description: "Quit the app"},
 }
 
 func Completer(d prompt.Document) []prompt.Suggest {
@@ -32,7 +32,7 @@ func Completer(d prompt.Document) []prompt.Suggest {
 		}
 	case "send":
 		if len(args) == 2 {
-			return []prompt.Suggest{{Text: "username", Description: "Message recipient"}}
+			return []prompt.Suggest{{Text: "username", Description: "Message recipient (empty for public)"}}
 		} else if len(args) > 2 {
 			return []prompt.Suggest{{Text: "text", Description: "Message text"}}
 		}
